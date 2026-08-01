@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+- Added a typed Halaxy referral payload and attachment value object.
+- Added an attachment-only referral update helper that rejects unsupported
+  property updates before sending them to Halaxy.
+
 ## v1.2.0 - 2026-08-01
 
 ### Added

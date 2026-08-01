@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Clinically\Halaxy\DTOs\ReferralAttachment;
+use Clinically\Halaxy\DTOs\ReferralPayload;
 use Clinically\Halaxy\Halaxy;
 use Clinically\Halaxy\Http\Response;
 use Clinically\Halaxy\Resources\Financial\ReferralResource;
@@ -87,11 +89,16 @@ test('can create a referral', function (): void {
     ]);
 
     $halaxy = app(Halaxy::class);
-    $response = $halaxy->referrals()->create([
-        'status' => 'active',
-        'subject' => ['reference' => 'Patient/12345'],
-        'requester' => ['reference' => 'Practitioner/99001'],
-    ]);
+    $response = $halaxy->referrals()->create(new ReferralPayload(
+        coverageReference: 'Coverage/66001',
+        subjectReference: 'Patient/12345',
+        requesterReference: 'PractitionerRole/EP-99001',
+        created: new DateTimeImmutable('2026-08-01T10:30:00+10:00'),
+        comment: 'Specialist review requested',
+        attachments: [
+            new ReferralAttachment('application/pdf', 'cGRmLWRhdGE=', 'referral.pdf'),
+        ],
+    ));
 
     expect($response->successful())->toBeTrue()
         ->and($response->status())->toBe(201)
@@ -102,11 +109,24 @@ test('can create a referral', function (): void {
 
         return $request->method() === 'POST'
             && str_contains($request->url(), 'Referral')
-            && ($body['resourceType'] ?? null) === 'Referral';
+            && $body === [
+                'resourceType' => 'Referral',
+                'coverage' => ['reference' => 'Coverage/66001', 'type' => 'Coverage'],
+                'requester' => ['reference' => 'PractitionerRole/EP-99001', 'type' => 'PractitionerRole'],
+                'created' => '2026-08-01T10:30:00+10:00',
+                'active' => true,
+                'subject' => ['reference' => 'Patient/12345', 'type' => 'Patient'],
+                'comment' => 'Specialist review requested',
+                'attachments' => [[
+                    'contentType' => 'application/pdf',
+                    'data' => 'cGRmLWRhdGE=',
+                    'title' => 'referral.pdf',
+                ]],
+            ];
     });
 });
 
-test('can update a referral', function (): void {
+test('can append attachments to a referral', function (): void {
     Http::fake([
         '*/oauth/token' => Http::response([
             'access_token' => 'test-token',
@@ -116,22 +136,36 @@ test('can update a referral', function (): void {
         '*/Referral/REF-001' => Http::response([
             'resourceType' => 'Referral',
             'id' => 'REF-001',
-            'status' => 'completed',
         ]),
     ]);
 
     $halaxy = app(Halaxy::class);
-    $response = $halaxy->referrals()->update('REF-001', [
-        'status' => 'completed',
-    ]);
+    $response = $halaxy->referrals()->addAttachments(
+        'REF-001',
+        new ReferralAttachment('application/pdf', 'cGRmLWRhdGE=', 'referral.pdf'),
+    );
 
-    expect($response->successful())->toBeTrue()
-        ->and($response->json()['status'])->toBe('completed');
+    expect($response->successful())->toBeTrue();
 
-    Http::assertSent(function ($request) {
+    Http::assertSent(function ($request): bool {
         return $request->method() === 'PATCH'
-            && str_contains($request->url(), 'Referral/REF-001');
+            && str_contains($request->url(), 'Referral/REF-001')
+            && json_decode($request->body(), true) === [
+                'resourceType' => 'Referral',
+                'attachments' => [[
+                    'contentType' => 'application/pdf',
+                    'data' => 'cGRmLWRhdGE=',
+                    'title' => 'referral.pdf',
+                ]],
+            ];
     });
+});
+
+test('rejects unsupported referral updates', function (): void {
+    $halaxy = app(Halaxy::class);
+
+    expect(fn () => $halaxy->referrals()->update('REF-001', ['active' => false]))
+        ->toThrow(InvalidArgumentException::class, 'only support attachment updates');
 });
 
 test('can use query builder to search referrals', function (): void {
