@@ -129,7 +129,7 @@
 | GET | `/Referral/{id}` | `referrals()->find($id)` | Get single referral |
 | GET | `/Referral` | `referrals()->list()` | List referrals |
 | POST | `/Referral` | `referrals()->create($data)` | Create referral |
-| PATCH | `/Referral/{id}` | `referrals()->update($id, $data)` | Update referral |
+| PATCH | `/Referral/{id}` | `referrals()->addAttachments($id, ...$attachments)` | Append referral attachments |
 
 #### ReferralDefinition (2 endpoints)
 | Method | Endpoint | SDK Method | Description |

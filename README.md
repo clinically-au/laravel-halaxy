@@ -154,6 +154,38 @@ Halaxy::appointments()->update($appointmentId, [
 ]);
 ```
 
+### Referrals
+
+Halaxy referrals use Halaxy-specific property names rather than the generic
+FHIR ServiceRequest names. A Coverage record must already exist. Use the typed
+payload to produce `coverage`, `created`, `active`, `comment`, and `attachments`:
+
+```php
+use Clinically\Halaxy\DTOs\ReferralAttachment;
+use Clinically\Halaxy\DTOs\ReferralPayload;
+
+$referral = Halaxy::referrals()->create(new ReferralPayload(
+    coverageReference: "Coverage/{$coverageId}",
+    subjectReference: "Patient/{$patientId}",
+    requesterReference: "PractitionerRole/{$requesterId}",
+    created: new DateTimeImmutable('now'),
+    comment: 'Specialist review requested',
+    attachments: [
+        new ReferralAttachment('application/pdf', $base64Data, 'referral.pdf'),
+    ],
+));
+```
+
+Halaxy's referral PATCH endpoint only appends attachments. It does not update
+or replace other referral properties:
+
+```php
+Halaxy::referrals()->addAttachments(
+    $referralId,
+    new ReferralAttachment('application/pdf', $base64Data, 'additional.pdf'),
+);
+```
+
 ### Schedules and Slots
 
 ```php
@@ -223,7 +255,7 @@ $response = $client->get('Patient', ['family' => 'Doe']);
 | Financial | `invoices()` | find, list |
 | Financial | `invoiceLines()` | find, list |
 | Financial | `paymentTransactions()` | find, list |
-| Financial | `referrals()` | find, list, create, update |
+| Financial | `referrals()` | find, list, create, addAttachments |
 | Financial | `referralDefinitions()` | find, list |
 | Clinical | `documentReferences()` | create |
 | Foundations | `capabilities()` | get |
