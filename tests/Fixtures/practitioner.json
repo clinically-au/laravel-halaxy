@@ -1,0 +1,55 @@
+{
+    "resourceType": "Practitioner",
+    "id": "99001",
+    "meta": {
+        "versionId": "1",
+        "lastUpdated": "2024-01-10T08:00:00Z"
+    },
+    "identifier": [
+        {
+            "use": "official",
+            "system": "http://halaxy.com/identifier/practitioner",
+            "value": "PRAC-99001"
+        },
+        {
+            "system": "http://ns.electronichealth.net.au/id/hi/hpii/1.0",
+            "value": "8003614900012345"
+        }
+    ],
+    "active": true,
+    "name": [
+        {
+            "use": "official",
+            "family": "Wilson",
+            "given": ["Sarah"],
+            "prefix": ["Dr."]
+        }
+    ],
+    "telecom": [
+        {
+            "system": "phone",
+            "value": "+61 2 9876 5432",
+            "use": "work"
+        },
+        {
+            "system": "email",
+            "value": "dr.wilson@clinic.example.com",
+            "use": "work"
+        }
+    ],
+    "gender": "female",
+    "qualification": [
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0360",
+                        "code": "MD",
+                        "display": "Doctor of Medicine"
+                    }
+                ],
+                "text": "Doctor of Medicine"
+            }
+        }
+    ]
+}

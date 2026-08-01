@@ -1,0 +1,79 @@
+{
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "link": [
+        {
+            "relation": "self",
+            "url": "https://au-api.halaxy.com/main/Appointment?_count=50"
+        },
+        {
+            "relation": "next",
+            "url": "https://au-api.halaxy.com/main/Appointment?_count=50&page=2"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "https://au-api.halaxy.com/main/Appointment/55001",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "55001",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2024-01-20T14:00:00Z"
+                },
+                "status": "booked",
+                "start": "2024-02-01T09:00:00+11:00",
+                "end": "2024-02-01T09:30:00+11:00",
+                "minutesDuration": 30,
+                "participant": [
+                    {
+                        "actor": {
+                            "reference": "Patient/12345",
+                            "display": "John Smith"
+                        },
+                        "status": "accepted"
+                    },
+                    {
+                        "actor": {
+                            "reference": "Practitioner/99001",
+                            "display": "Dr. Sarah Wilson"
+                        },
+                        "status": "accepted"
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "https://au-api.halaxy.com/main/Appointment/55002",
+            "resource": {
+                "resourceType": "Appointment",
+                "id": "55002",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2024-01-21T10:00:00Z"
+                },
+                "status": "pending",
+                "start": "2024-02-02T14:00:00+11:00",
+                "end": "2024-02-02T14:45:00+11:00",
+                "minutesDuration": 45,
+                "participant": [
+                    {
+                        "actor": {
+                            "reference": "Patient/67890",
+                            "display": "Jane Doe"
+                        },
+                        "status": "needs-action"
+                    },
+                    {
+                        "actor": {
+                            "reference": "Practitioner/99002",
+                            "display": "Dr. Michael Johnson"
+                        },
+                        "status": "accepted"
+                    }
+                ]
+            }
+        }
+    ]
+}

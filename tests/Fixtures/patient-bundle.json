@@ -1,0 +1,59 @@
+{
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "link": [
+        {
+            "relation": "self",
+            "url": "https://au-api.halaxy.com/main/Patient?_count=50"
+        },
+        {
+            "relation": "next",
+            "url": "https://au-api.halaxy.com/main/Patient?_count=50&page=2"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "https://au-api.halaxy.com/main/Patient/12345",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "12345",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2024-01-15T10:30:00Z"
+                },
+                "active": true,
+                "name": [
+                    {
+                        "use": "official",
+                        "family": "Smith",
+                        "given": ["John"]
+                    }
+                ],
+                "gender": "male",
+                "birthDate": "1980-05-15"
+            }
+        },
+        {
+            "fullUrl": "https://au-api.halaxy.com/main/Patient/67890",
+            "resource": {
+                "resourceType": "Patient",
+                "id": "67890",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2024-01-14T09:15:00Z"
+                },
+                "active": true,
+                "name": [
+                    {
+                        "use": "official",
+                        "family": "Doe",
+                        "given": ["Jane"]
+                    }
+                ],
+                "gender": "female",
+                "birthDate": "1990-08-22"
+            }
+        }
+    ]
+}

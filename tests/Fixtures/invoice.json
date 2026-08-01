@@ -1,0 +1,54 @@
+{
+    "resourceType": "Invoice",
+    "id": "77001",
+    "meta": {
+        "versionId": "1",
+        "lastUpdated": "2024-01-25T16:00:00Z"
+    },
+    "identifier": [
+        {
+            "system": "http://halaxy.com/identifier/invoice",
+            "value": "INV-77001"
+        }
+    ],
+    "status": "issued",
+    "type": {
+        "coding": [
+            {
+                "system": "http://halaxy.com/invoice-type",
+                "code": "patient",
+                "display": "Patient Invoice"
+            }
+        ]
+    },
+    "subject": {
+        "reference": "Patient/12345",
+        "display": "John Smith"
+    },
+    "date": "2024-01-25",
+    "participant": [
+        {
+            "role": {
+                "coding": [
+                    {
+                        "system": "http://halaxy.com/invoice-participant-role",
+                        "code": "provider",
+                        "display": "Healthcare Provider"
+                    }
+                ]
+            },
+            "actor": {
+                "reference": "Practitioner/99001",
+                "display": "Dr. Sarah Wilson"
+            }
+        }
+    ],
+    "totalNet": {
+        "value": 85.00,
+        "currency": "AUD"
+    },
+    "totalGross": {
+        "value": 85.00,
+        "currency": "AUD"
+    }
+}

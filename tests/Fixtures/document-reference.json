@@ -1,0 +1,68 @@
+{
+    "resourceType": "DocumentReference",
+    "id": "DOC-001",
+    "meta": {
+        "versionId": "1",
+        "lastUpdated": "2024-01-25T14:00:00Z"
+    },
+    "identifier": [
+        {
+            "system": "http://halaxy.com/identifier/document",
+            "value": "DOC-001"
+        }
+    ],
+    "status": "current",
+    "type": {
+        "coding": [
+            {
+                "system": "http://loinc.org",
+                "code": "34108-1",
+                "display": "Outpatient Note"
+            }
+        ]
+    },
+    "category": [
+        {
+            "coding": [
+                {
+                    "system": "http://loinc.org",
+                    "code": "clinical-note",
+                    "display": "Clinical Note"
+                }
+            ]
+        }
+    ],
+    "subject": {
+        "reference": "Patient/12345",
+        "display": "John Smith"
+    },
+    "date": "2024-01-25T14:00:00Z",
+    "author": [
+        {
+            "reference": "Practitioner/99001",
+            "display": "Dr. Sarah Wilson"
+        }
+    ],
+    "description": "Clinical notes from consultation on 2024-01-25",
+    "content": [
+        {
+            "attachment": {
+                "contentType": "application/pdf",
+                "url": "https://au-api.halaxy.com/main/Binary/BIN-001",
+                "title": "Consultation Notes - 2024-01-25.pdf",
+                "creation": "2024-01-25T14:00:00Z"
+            }
+        }
+    ],
+    "context": {
+        "encounter": [
+            {
+                "reference": "Encounter/ENC-001"
+            }
+        ],
+        "period": {
+            "start": "2024-01-25T09:00:00+11:00",
+            "end": "2024-01-25T09:30:00+11:00"
+        }
+    }
+}

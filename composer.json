@@ -1,0 +1,75 @@
+{
+    "name": "clinically/laravel-halaxy",
+    "description": "Laravel SDK for the Halaxy FHIR R4B healthcare API",
+    "keywords": [
+        "clinically",
+        "halaxy",
+        "fhir",
+        "healthcare",
+        "api",
+        "laravel",
+        "sdk"
+    ],
+    "homepage": "https://github.com/clinically-au/laravel-halaxy",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Clinically",
+            "email": "dev@clinically.com.au"
+        }
+    ],
+    "require": {
+        "php": "^8.5",
+        "illuminate/cache": "^13.0",
+        "illuminate/contracts": "^13.0",
+        "illuminate/http": "^13.0",
+        "illuminate/support": "^13.0",
+        "spatie/laravel-webhook-client": "^3.4"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.18",
+        "orchestra/testbench": "^11.0",
+        "pestphp/pest": "^5.0",
+        "pestphp/pest-plugin-laravel": "^5.0",
+        "phpstan/phpstan": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Clinically\\Halaxy\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Clinically\\Halaxy\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "analyse": "vendor/bin/phpstan analyse",
+        "lint": "vendor/bin/pint",
+        "lint:check": "vendor/bin/pint --test",
+        "test": "vendor/bin/pest --no-coverage --exclude-testsuite=Integration",
+        "test:coverage": "vendor/bin/pest --coverage",
+        "test:unit": "vendor/bin/pest --no-coverage --testsuite=Unit",
+        "test:feature": "vendor/bin/pest --no-coverage --testsuite=Feature",
+        "test:integration": "vendor/bin/pest --no-coverage --testsuite=Integration"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Clinically\\Halaxy\\HalaxyServiceProvider"
+            ],
+            "aliases": {
+                "Halaxy": "Clinically\\Halaxy\\Facades\\Halaxy"
+            }
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

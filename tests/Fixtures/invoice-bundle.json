@@ -1,0 +1,71 @@
+{
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "link": [
+        {
+            "relation": "self",
+            "url": "https://au-api.halaxy.com/main/Invoice?_count=50"
+        },
+        {
+            "relation": "next",
+            "url": "https://au-api.halaxy.com/main/Invoice?_count=50&page=2"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "https://au-api.halaxy.com/main/Invoice/77001",
+            "resource": {
+                "resourceType": "Invoice",
+                "id": "77001",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2024-01-25T16:00:00Z"
+                },
+                "identifier": [
+                    {
+                        "system": "http://halaxy.com/identifier/invoice",
+                        "value": "INV-77001"
+                    }
+                ],
+                "status": "issued",
+                "subject": {
+                    "reference": "Patient/12345",
+                    "display": "John Smith"
+                },
+                "date": "2024-01-25",
+                "totalGross": {
+                    "value": 85.00,
+                    "currency": "AUD"
+                }
+            }
+        },
+        {
+            "fullUrl": "https://au-api.halaxy.com/main/Invoice/77002",
+            "resource": {
+                "resourceType": "Invoice",
+                "id": "77002",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2024-01-26T10:00:00Z"
+                },
+                "identifier": [
+                    {
+                        "system": "http://halaxy.com/identifier/invoice",
+                        "value": "INV-77002"
+                    }
+                ],
+                "status": "balanced",
+                "subject": {
+                    "reference": "Patient/67890",
+                    "display": "Jane Doe"
+                },
+                "date": "2024-01-26",
+                "totalGross": {
+                    "value": 150.00,
+                    "currency": "AUD"
+                }
+            }
+        }
+    ]
+}

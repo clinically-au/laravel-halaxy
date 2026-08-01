@@ -1,0 +1,66 @@
+{
+    "resourceType": "PractitionerRole",
+    "id": "PR-001",
+    "meta": {
+        "versionId": "1",
+        "lastUpdated": "2024-01-10T08:00:00Z"
+    },
+    "identifier": [
+        {
+            "system": "http://halaxy.com/identifier/practitioner-role",
+            "value": "PR-001"
+        }
+    ],
+    "active": true,
+    "period": {
+        "start": "2024-01-01"
+    },
+    "practitioner": {
+        "reference": "Practitioner/99001",
+        "display": "Dr. Sarah Wilson"
+    },
+    "organization": {
+        "reference": "Organization/88001",
+        "display": "Sydney Medical Centre"
+    },
+    "code": [
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "62247001",
+                    "display": "General practitioner"
+                }
+            ]
+        }
+    ],
+    "specialty": [
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "394814009",
+                    "display": "General practice"
+                }
+            ]
+        }
+    ],
+    "location": [
+        {
+            "reference": "Location/LOC-001",
+            "display": "Sydney Medical Centre - Main Building"
+        }
+    ],
+    "healthcareService": [
+        {
+            "reference": "HealthcareService/HS-001"
+        }
+    ],
+    "availableTime": [
+        {
+            "daysOfWeek": ["mon", "tue", "wed", "thu", "fri"],
+            "availableStartTime": "09:00:00",
+            "availableEndTime": "17:00:00"
+        }
+    ]
+}

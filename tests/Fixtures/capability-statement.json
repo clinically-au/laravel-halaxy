@@ -1,0 +1,49 @@
+{
+    "resourceType": "CapabilityStatement",
+    "id": "halaxy-api",
+    "status": "active",
+    "date": "2024-01-01",
+    "kind": "instance",
+    "software": {
+        "name": "Halaxy FHIR API",
+        "version": "1.0.0"
+    },
+    "implementation": {
+        "description": "Halaxy FHIR R4B API",
+        "url": "https://au-api.halaxy.com/main"
+    },
+    "fhirVersion": "4.3.0",
+    "format": ["application/fhir+json"],
+    "rest": [
+        {
+            "mode": "server",
+            "resource": [
+                {
+                    "type": "Patient",
+                    "interaction": [
+                        {"code": "read"},
+                        {"code": "search-type"},
+                        {"code": "create"},
+                        {"code": "update"}
+                    ]
+                },
+                {
+                    "type": "Practitioner",
+                    "interaction": [
+                        {"code": "read"},
+                        {"code": "search-type"},
+                        {"code": "create"}
+                    ]
+                },
+                {
+                    "type": "Appointment",
+                    "interaction": [
+                        {"code": "read"},
+                        {"code": "search-type"},
+                        {"code": "update"}
+                    ]
+                }
+            ]
+        }
+    ]
+}

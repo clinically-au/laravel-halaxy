@@ -1,0 +1,51 @@
+{
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "link": [
+        {
+            "relation": "self",
+            "url": "https://au-api.halaxy.com/main/Organization?_count=50"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "https://au-api.halaxy.com/main/Organization/88001",
+            "resource": {
+                "resourceType": "Organization",
+                "id": "88001",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2024-01-05T12:00:00Z"
+                },
+                "active": true,
+                "name": "Sydney Medical Centre",
+                "address": [
+                    {
+                        "city": "Sydney",
+                        "state": "NSW"
+                    }
+                ]
+            }
+        },
+        {
+            "fullUrl": "https://au-api.halaxy.com/main/Organization/88002",
+            "resource": {
+                "resourceType": "Organization",
+                "id": "88002",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2024-01-06T09:00:00Z"
+                },
+                "active": true,
+                "name": "Melbourne Health Clinic",
+                "address": [
+                    {
+                        "city": "Melbourne",
+                        "state": "VIC"
+                    }
+                ]
+            }
+        }
+    ]
+}

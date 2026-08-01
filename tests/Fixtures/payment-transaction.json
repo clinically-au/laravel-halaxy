@@ -1,0 +1,28 @@
+{
+    "resourceType": "PaymentTransaction",
+    "id": "PT-001",
+    "meta": {
+        "versionId": "1",
+        "lastUpdated": "2024-01-26T10:00:00Z"
+    },
+    "identifier": [
+        {
+            "system": "http://halaxy.com/identifier/payment",
+            "value": "PT-001"
+        }
+    ],
+    "status": "completed",
+    "payment": {
+        "amount": {
+            "value": 85.00,
+            "currency": "AUD"
+        }
+    },
+    "paymentDate": "2024-01-26",
+    "recipient": {
+        "reference": "Organization/88001"
+    },
+    "request": {
+        "reference": "Invoice/77001"
+    }
+}

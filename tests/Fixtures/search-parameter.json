@@ -1,0 +1,16 @@
+{
+    "resourceType": "SearchParameter",
+    "id": "patient-name",
+    "meta": {
+        "versionId": "1",
+        "lastUpdated": "2024-01-01T10:00:00Z"
+    },
+    "url": "http://halaxy.com/SearchParameter/patient-name",
+    "name": "name",
+    "status": "active",
+    "description": "A portion of the patient's name",
+    "code": "name",
+    "base": ["Patient"],
+    "type": "string",
+    "expression": "Patient.name"
+}

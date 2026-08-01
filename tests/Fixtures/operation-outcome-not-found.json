@@ -1,0 +1,13 @@
+{
+    "resourceType": "OperationOutcome",
+    "issue": [
+        {
+            "severity": "error",
+            "code": "not-found",
+            "details": {
+                "text": "Resource not found"
+            },
+            "diagnostics": "Patient/99999 not found"
+        }
+    ]
+}

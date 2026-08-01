@@ -1,0 +1,39 @@
+{
+    "resourceType": "ChargeItemDefinition",
+    "id": "CID-001",
+    "meta": {
+        "versionId": "1",
+        "lastUpdated": "2024-01-01T10:00:00Z"
+    },
+    "url": "http://halaxy.com/ChargeItemDefinition/CID-001",
+    "identifier": [
+        {
+            "system": "http://halaxy.com/identifier/charge-item",
+            "value": "CID-001"
+        }
+    ],
+    "status": "active",
+    "title": "Standard GP Consultation",
+    "code": {
+        "coding": [
+            {
+                "system": "http://halaxy.com/service-code",
+                "code": "23",
+                "display": "Level B Consultation"
+            }
+        ]
+    },
+    "propertyGroup": [
+        {
+            "priceComponent": [
+                {
+                    "type": "base",
+                    "amount": {
+                        "value": 85.00,
+                        "currency": "AUD"
+                    }
+                }
+            ]
+        }
+    ]
+}

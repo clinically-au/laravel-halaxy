@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-01-02T03:04:05+00:00",
+  "type": "history",
+  "link": [],
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:00000000-0000-4000-8000-000000000004",
+      "resource": {
+        "subscription": {
+          "reference": "https://au-api.halaxy.com/main/Subscription/00000000-0000-4000-8000-000000000001",
+          "type": "Subscription"
+        },
+        "topic": {
+          "reference": "https://au-api.halaxy.com/main/SubscriptionTopic/00000000-0000-4000-8000-000000000002",
+          "type": "SubscriptionTopic"
+        },
+        "status": "active",
+        "type": "event-notification",
+        "eventsSinceSubscriptionStart": "2",
+        "notificationEvent": [
+          {
+            "eventNumber": "3",
+            "timestamp": "2026-01-02T03:04:05+00:00",
+            "focus": {
+              "reference": "https://au-api.halaxy.com/main/Patient/synthetic-patient-001",
+              "type": "Patient"
+            },
+            "id": "00000000-0000-4000-8000-000000000003"
+          }
+        ],
+        "id": "00000000-0000-4000-8000-000000000004",
+        "meta": {
+          "profile": "http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-subscription-status"
+        },
+        "resourceType": "SubscriptionStatus"
+      }
+    }
+  ],
+  "contained": [],
+  "extension": [],
+  "modifierExtension": [],
+  "id": "00000000-0000-4000-8000-000000000005",
+  "meta": {
+    "profile": "http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-subscription-notification",
+    "security": [],
+    "tag": []
+  },
+  "resourceType": "Bundle"
+}

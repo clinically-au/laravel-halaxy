@@ -1,0 +1,49 @@
+{
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "link": [
+        {
+            "relation": "self",
+            "url": "https://au-api.halaxy.com/main/Schedule?_count=50"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "https://au-api.halaxy.com/main/Schedule/33001",
+            "resource": {
+                "resourceType": "Schedule",
+                "id": "33001",
+                "active": true,
+                "actor": [
+                    {
+                        "reference": "Practitioner/99001",
+                        "display": "Dr. Sarah Wilson"
+                    }
+                ],
+                "planningHorizon": {
+                    "start": "2024-02-01T00:00:00+11:00",
+                    "end": "2024-02-28T23:59:59+11:00"
+                }
+            }
+        },
+        {
+            "fullUrl": "https://au-api.halaxy.com/main/Schedule/33002",
+            "resource": {
+                "resourceType": "Schedule",
+                "id": "33002",
+                "active": true,
+                "actor": [
+                    {
+                        "reference": "Practitioner/99002",
+                        "display": "Dr. Michael Johnson"
+                    }
+                ],
+                "planningHorizon": {
+                    "start": "2024-02-01T00:00:00+11:00",
+                    "end": "2024-02-28T23:59:59+11:00"
+                }
+            }
+        }
+    ]
+}

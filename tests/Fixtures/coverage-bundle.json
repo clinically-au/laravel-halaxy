@@ -1,0 +1,45 @@
+{
+    "resourceType": "Bundle",
+    "type": "searchset",
+    "total": 2,
+    "link": [
+        {
+            "relation": "self",
+            "url": "https://au-api.halaxy.com/main/Coverage?_count=50"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "https://au-api.halaxy.com/main/Coverage/66001",
+            "resource": {
+                "resourceType": "Coverage",
+                "id": "66001",
+                "status": "active",
+                "beneficiary": {
+                    "reference": "Patient/12345",
+                    "display": "John Smith"
+                },
+                "period": {
+                    "start": "2024-01-01",
+                    "end": "2024-12-31"
+                }
+            }
+        },
+        {
+            "fullUrl": "https://au-api.halaxy.com/main/Coverage/66002",
+            "resource": {
+                "resourceType": "Coverage",
+                "id": "66002",
+                "status": "active",
+                "beneficiary": {
+                    "reference": "Patient/67890",
+                    "display": "Jane Doe"
+                },
+                "period": {
+                    "start": "2024-01-01",
+                    "end": "2024-12-31"
+                }
+            }
+        }
+    ]
+}
