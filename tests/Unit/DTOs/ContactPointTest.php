@@ -18,6 +18,10 @@ test('serializes Halaxy patient telecom contact points', function (): void {
         'system' => 'phone',
         'value' => '+61298765432',
         'use' => 'work',
+    ])->and(ContactPoint::fax('+61298765433')->toArray())->toBe([
+        'system' => 'fax',
+        'value' => '+61298765433',
+        'use' => 'work',
     ])->and(ContactPoint::email('patient@example.com')->toArray())->toBe([
         'system' => 'email',
         'value' => 'patient@example.com',
@@ -36,3 +40,18 @@ test('rejects phone numbers that are not in compact international format', funct
 test('rejects invalid email addresses', function (): void {
     ContactPoint::email('not-an-email');
 })->throws(InvalidArgumentException::class, 'Email addresses sent to Halaxy must be valid.');
+
+test('rejects mobile use for contact types other than SMS', function (): void {
+    $invalidContacts = [
+        fn (): ContactPoint => ContactPoint::phone('+61298765432', ContactPointUse::Mobile),
+        fn (): ContactPoint => ContactPoint::fax('+61298765433', ContactPointUse::Mobile),
+        fn (): ContactPoint => ContactPoint::email('patient@example.com', ContactPointUse::Mobile),
+    ];
+
+    foreach ($invalidContacts as $invalidContact) {
+        expect($invalidContact)->toThrow(
+            InvalidArgumentException::class,
+            'Mobile contact points must use the Halaxy SMS contact type.',
+        );
+    }
+});
