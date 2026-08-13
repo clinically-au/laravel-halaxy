@@ -46,30 +46,36 @@ HALAXY_REGION=au  # au or eu
 ### Patients
 
 ```php
+use Clinically\Halaxy\DTOs\ContactPoint;
+use Clinically\Halaxy\DTOs\PatientPayload;
 use Clinically\Halaxy\Facades\Halaxy;
 
 // Find, list, create
 $patient = Halaxy::patients()->find('123456')->json();
 $bundle = Halaxy::patients()->list(['_count' => 30]);
 
-$created = Halaxy::patients()->create([
-    'name' => [['use' => 'official', 'given' => ['John'], 'family' => 'Doe']],
-    'birthDate' => '1990-01-15',
-]);
+$payload = new PatientPayload(
+    name: [['use' => 'official', 'given' => ['John'], 'family' => 'Doe']],
+    telecom: [
+        ContactPoint::mobile('+61400000000'),
+        ContactPoint::email('john@example.com'),
+    ],
+    birthDate: '1990-01-15',
+);
+
+$created = Halaxy::patients()->create($payload);
 
 // Partial update (JSON merge-patch)
-Halaxy::patients()->update('123456', [
-    'telecom' => [['system' => 'phone', 'value' => '0400000000', 'use' => 'mobile']],
-]);
+Halaxy::patients()->update('123456', $payload);
 
 // Full replace (PUT) — destructive: writable properties omitted from the
 // payload are REMOVED from the profile (only file attachments survive).
 // Always send the complete desired state.
-Halaxy::patients()->replace('123456', [
-    'name' => [['use' => 'official', 'given' => ['John'], 'family' => 'Doe']],
-    'birthDate' => '1990-01-15',
-    'telecom' => [['system' => 'phone', 'value' => '0400000000', 'use' => 'mobile']],
-]);
+Halaxy::patients()->replace('123456', $payload);
+
+// Raw arrays remain supported for backwards compatibility, but typed contact
+// points enforce Halaxy's required SMS/mobile type and compact international
+// phone format before a request is sent.
 
 // Export references for every patient in the practice
 $references = Halaxy::patients()->exportIds()->json();
@@ -277,6 +283,10 @@ Verified against the live API — worth knowing before you integrate:
   ignored — archiving is UI-only.
 - **PUT replace is destructive.** Writable properties omitted from a
   `replace()` payload are removed. Send the complete desired state.
+- **Patient phone values use compact international format.** Mobile numbers
+  use `system=sms`, `use=mobile`; fixed phones use `system=phone` with a
+  `home` or `work` purpose. Prefer the typed `ContactPoint` factories so
+  invalid payloads fail before an HTTP request is sent.
 - **Appointment status is not directly writable.** Book with the `status`
   parameter; cancel via the participant `modifierExtension` (see above).
 - **Polymorphic search parameters need `Type/id` values.** e.g.

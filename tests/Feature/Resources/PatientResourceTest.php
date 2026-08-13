@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Clinically\Halaxy\DTOs\ContactPoint;
+use Clinically\Halaxy\DTOs\PatientPayload;
 use Clinically\Halaxy\Halaxy;
 use Clinically\Halaxy\Http\Response;
 use Clinically\Halaxy\Resources\People\PatientResource;
@@ -209,6 +211,46 @@ test('can replace a patient', function (): void {
             && ($body['resourceType'] ?? null) === 'Patient'
             && ($body['id'] ?? null) === '12345';
     });
+});
+
+test('typed patient payloads are supported by every write operation', function (): void {
+    Http::fake([
+        '*/oauth/token' => Http::response([
+            'access_token' => 'test-token',
+            'token_type' => 'Bearer',
+            'expires_in' => 900,
+        ]),
+        '*/Patient*' => Http::response([
+            'resourceType' => 'Patient',
+            'id' => '12345',
+        ], 201),
+    ]);
+
+    $payload = new PatientPayload(
+        name: [['use' => 'official', 'family' => 'Citizen', 'given' => ['Jane']]],
+        telecom: [ContactPoint::mobile('+61412345678')],
+    );
+
+    $patients = app(Halaxy::class)->patients();
+    $patients->create($payload);
+    $patients->update('12345', $payload);
+    $patients->replace('12345', $payload);
+
+    $writes = Http::recorded(
+        fn ($request): bool => in_array($request->method(), ['POST', 'PATCH', 'PUT'], true)
+            && str_contains($request->url(), '/Patient'),
+    );
+
+    expect($writes)->toHaveCount(3)
+        ->and($writes->pluck('0')->map->method()->all())->toBe(['POST', 'PATCH', 'PUT']);
+
+    foreach ($writes as [$request]) {
+        expect($request->data()['telecom'])->toBe([[
+            'system' => 'sms',
+            'value' => '+61412345678',
+            'use' => 'mobile',
+        ]]);
+    }
 });
 
 test('can use query builder to search patients', function (): void {

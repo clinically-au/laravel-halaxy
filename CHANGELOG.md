@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## v1.3.0 - 2026-08-13
+
+### Added
+
+- Added typed patient payload and contact-point value objects for patient
+  create, update, and replace operations while retaining raw-array support.
+
+### Fixed
+
+- Mobile patient contacts now use Halaxy's `sms` / `mobile` shape, and phone
+  values are rejected before sending unless they use compact international
+  format.
+- Patient email and fixed-phone contact points always include a supported
+  purpose.
+
+## v1.2.1 - 2026-08-01
+
 ### Added
 
 - Added a typed Halaxy referral payload and attachment value object.
