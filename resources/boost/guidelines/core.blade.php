@@ -24,15 +24,18 @@ This package is a Laravel SDK for the Halaxy FHIR R4B healthcare API. All access
 
 @verbatim
 <code-snippet name="Resource usage" lang="php">
+use Clinically\Halaxy\DTOs\ContactPoint;
+use Clinically\Halaxy\DTOs\PatientPayload;
+
 $patient = Halaxy::patients()->find('123456')->json();
 
 $bundle = Halaxy::patients()->query()
     ->where('family', 'Doe')
     ->paginate(50);
 
-Halaxy::patients()->update('123456', ['telecom' => [
-    ['system' => 'phone', 'value' => '0400000000', 'use' => 'mobile'],
-]]);
+Halaxy::patients()->update('123456', new PatientPayload(
+    telecom: [ContactPoint::mobile('+61400000000')],
+));
 </code-snippet>
 @endverbatim
 
@@ -75,6 +78,7 @@ $halaxy->patients()->list();
 - Appointments have no writable `status`; cancel by patching the patient participant's `modifierExtension` with coding `cancelled (no charge)` (system `.../presets/CodeSystem/appointment-participant-status`).
 - Polymorphic search parameters (e.g. invoice `recipient`) require `Type/id` values (`Patient/123`); bare IDs return HTTP 422.
 - `update()` is JSON merge-patch; `Patient` writable fields are name, telecom, gender, birthDate, deceasedBoolean, address, contact (attachments is write-only).
+- Patient phone values must use compact international format. Use `ContactPoint::mobile()` for Halaxy's required `sms` / `mobile` shape and `ContactPoint::phone()` for fixed `home` or `work` numbers.
 
 ### Error handling
 
