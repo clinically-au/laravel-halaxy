@@ -71,6 +71,28 @@ class HalaxyException extends Exception
         return $this->statusCode;
     }
 
+    /**
+     * Determine whether repeating the identical request could plausibly succeed.
+     *
+     * A 4xx is a verdict on the request itself, so retrying one only burns the
+     * caller's attempts and multiplies the noise in their error tracker. The
+     * exceptions are 429 (the whole point of Retry-After) and 408. Anything
+     * without a status — a connection failure surfaced as a bare
+     * HalaxyException — is treated as retryable.
+     */
+    public function isRetryable(): bool
+    {
+        if ($this->statusCode === null) {
+            return true;
+        }
+
+        if (in_array($this->statusCode, [408, 429], true)) {
+            return true;
+        }
+
+        return $this->statusCode >= 500 && $this->statusCode !== 501;
+    }
+
     public function getRequestMethod(): ?string
     {
         return $this->requestMethod;

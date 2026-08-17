@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Clinically\Halaxy\Exceptions\AuthenticationException;
 use Clinically\Halaxy\Exceptions\ForbiddenException;
+use Clinically\Halaxy\Exceptions\HalaxyException;
+use Clinically\Halaxy\Exceptions\MethodNotAllowedException;
 use Clinically\Halaxy\Exceptions\NotFoundException;
 use Clinically\Halaxy\Exceptions\RateLimitException;
 use Clinically\Halaxy\Exceptions\ServerException;
@@ -174,6 +176,53 @@ test('throws RateLimitException on 429 response', function (): void {
         expect($e->getStatusCode())->toBe(429)
             ->and($e->retryAfter)->toBe(60);
     }
+});
+
+test('throws MethodNotAllowedException on 405 response', function (): void {
+    Http::fake([
+        '*/oauth/token' => Http::response([
+            'access_token' => 'test-token',
+            'token_type' => 'Bearer',
+            'expires_in' => 900,
+        ]),
+        '*/Practitioner/PR-1' => Http::response(null, 405, ['Allow' => 'GET, POST']),
+    ]);
+
+    $halaxy = app(Halaxy::class);
+
+    try {
+        $halaxy->getClient()->patch('Practitioner/PR-1', ['resourceType' => 'Practitioner']);
+        $this->fail('Expected MethodNotAllowedException');
+    } catch (MethodNotAllowedException $e) {
+        // Halaxy sends no body with a 405, so the message has to be built from
+        // the request — otherwise this reads as "An unknown error occurred".
+        expect($e->getStatusCode())->toBe(405)
+            ->and($e->getRequestMethod())->toBe('PATCH')
+            ->and($e->getMessage())->toContain('does not support PATCH')
+            ->and($e->getMessage())->toContain('Practitioner/PR-1')
+            ->and($e->getMessage())->toContain('Allowed methods: GET, POST')
+            ->and($e->isRetryable())->toBeFalse();
+    }
+});
+
+test('marks 4xx as non-retryable and 5xx, 408, 429 as retryable', function (int $status, bool $retryable): void {
+    expect((new HalaxyException('nope', $status))->isRetryable())->toBe($retryable);
+})->with([
+    'bad request' => [400, false],
+    'unauthorized' => [401, false],
+    'forbidden' => [403, false],
+    'not found' => [404, false],
+    'method not allowed' => [405, false],
+    'request timeout' => [408, true],
+    'unprocessable' => [422, false],
+    'rate limited' => [429, true],
+    'server error' => [500, true],
+    'not implemented' => [501, false],
+    'unavailable' => [503, true],
+]);
+
+test('treats a status-less failure as retryable', function (): void {
+    expect((new HalaxyException('connection reset'))->isRetryable())->toBeTrue();
 });
 
 test('throws ServerException on 500 response', function (): void {

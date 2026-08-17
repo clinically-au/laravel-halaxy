@@ -10,6 +10,7 @@ use Clinically\Halaxy\Enums\Region;
 use Clinically\Halaxy\Exceptions\AuthenticationException;
 use Clinically\Halaxy\Exceptions\ForbiddenException;
 use Clinically\Halaxy\Exceptions\HalaxyException;
+use Clinically\Halaxy\Exceptions\MethodNotAllowedException;
 use Clinically\Halaxy\Exceptions\NotFoundException;
 use Clinically\Halaxy\Exceptions\RateLimitException;
 use Clinically\Halaxy\Exceptions\ServerException;
@@ -222,6 +223,7 @@ final class Client implements ClientInterface
             401 => throw AuthenticationException::tokenExpired(),
             403 => throw ForbiddenException::insufficientPermissions(),
             404 => throw NotFoundException::fromResponse($response, $method, $url),
+            405 => throw MethodNotAllowedException::fromResponse($response, $method, $url),
             422, 400 => throw $this->createValidationException($response, $method, $url),
             429 => throw $this->createRateLimitException($response),
             500 => throw ServerException::internalError(),

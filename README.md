@@ -295,6 +295,30 @@ Verified against the live API — worth knowing before you integrate:
   filters against a control query before trusting them.
 - **A `User-Agent` header is mandatory.** Halaxy's gateway rejects requests
   without one (HTTP 403). The SDK always sends `halaxy.user_agent`.
+- **Most resources cannot be updated at all.** Only `Patient`, `Coverage`,
+  `Appointment`, `Referral` and `DocumentReference` accept `patch`.
+  `Practitioner`, `PractitionerRole` and `Organization` are create-and-search
+  only — a `PATCH` returns HTTP 405 with an empty body. The resource classes
+  mirror this by omitting `update()`, so a 405 means something bypassed them
+  via `getClient()->patch(...)`. `Halaxy::capabilities()` is the authority:
+
+  ```php
+  collect(Halaxy::capabilities()->get()->json()['rest'][0]['resource'])
+      ->mapWithKeys(fn ($r) => [$r['type'] => collect($r['interaction'])->pluck('code')->implode(',')]);
+  ```
+
+- **Only a practice PractitionerRole may author a DocumentReference.** Halaxy
+  keeps two disjoint role namespaces: the practice's own (`PR-…`, profile
+  `hx-practitioner-role`, organization `CL-…`) and external referrer roles
+  created through the API (`EP-…`, profile `hx-external-practitioner-role`,
+  organization `SP-…`). PractitionerRole search returns both, and
+  `GET PractitionerRole/EP-…` answers 200 — so a caller cannot distinguish
+  them by whether the reference resolves. Naming an external role as `author`
+  fails the create with **404 "Author not found"**, which reads like a broken
+  reference and is not: the role exists, it is just not an eligible author.
+  `author` is optional, so a document whose only known author is an external
+  referrer should be filed with no author rather than misattributed to a
+  practice clinician who did not write it.
 
 ## Webhooks
 
@@ -391,6 +415,7 @@ are superseded by the package's entries — put overrides in
 
 ```php
 use Clinically\Halaxy\Exceptions\AuthenticationException;
+use Clinically\Halaxy\Exceptions\MethodNotAllowedException;
 use Clinically\Halaxy\Exceptions\NotFoundException;
 use Clinically\Halaxy\Exceptions\RateLimitException;
 use Clinically\Halaxy\Exceptions\ServerException;
@@ -400,12 +425,34 @@ try {
     $response = Halaxy::patients()->find('invalid-id');
 } catch (NotFoundException $e) {
     // 404
+} catch (MethodNotAllowedException $e) {
+    // 405 — the resource does not support this interaction at all
 } catch (ValidationException $e) {
     // 400/422 — $e->operationOutcome holds the FHIR OperationOutcome issues
 } catch (AuthenticationException $e) {
     // 401/403 — message includes the OAuth error detail
 } catch (RateLimitException $e) {
     $retryAfter = $e->retryAfter;
+}
+```
+
+Every exception extends `HalaxyException` and carries the status, request
+method, request URL and parsed OperationOutcome. Persist
+`$e->getOperationOutcome()` when logging a failure — the one-line message is
+often too little to diagnose from later.
+
+`isRetryable()` says whether repeating the identical request could plausibly
+succeed. A 4xx is a verdict on the request, so retrying one only burns
+attempts and multiplies noise in your error tracker; 408, 429 and 5xx (bar
+501) are worth another go. Use it to fail a queued job fast:
+
+```php
+try {
+    Halaxy::documentReferences()->create($payload);
+} catch (HalaxyException $e) {
+    report($e);
+
+    $e->isRetryable() ? $this->release(60) : $this->fail($e);
 }
 ```
 

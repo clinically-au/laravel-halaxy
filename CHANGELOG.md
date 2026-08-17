@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## v1.4.0 - 2026-08-17
+
+### Added
+
+- Added `MethodNotAllowedException` for HTTP 405. Halaxy answers a rejected
+  method with an empty body, so this previously fell through to a generic
+  `HalaxyException` reading "An unknown error occurred"; the message now names
+  the method, the endpoint, and any `Allow` header. It extends
+  `HalaxyException`, so existing catch blocks are unaffected.
+- Added `HalaxyException::isRetryable()` so callers can fail a queued job
+  immediately on a 4xx instead of retrying a request the API has already
+  ruled on. 408, 429 and 5xx (bar 501) remain retryable.
+
+### Documentation
+
+- Documented the per-resource interaction matrix: only `Patient`, `Coverage`,
+  `Appointment`, `Referral` and `DocumentReference` accept `patch`.
+  `Practitioner`, `PractitionerRole` and `Organization` are create-and-search
+  only and answer `PATCH` with 405.
+- Documented that only a practice `PractitionerRole` (`PR-…`) may author a
+  `DocumentReference`. External referrer roles (`EP-…`) resolve to 200 on a
+  GET but fail the create with 404 "Author not found"; `author` is optional,
+  so such documents should be filed unattributed. Pinned by write-gated
+  integration coverage.
+
 ## v1.3.0 - 2026-08-13
 
 ### Added
